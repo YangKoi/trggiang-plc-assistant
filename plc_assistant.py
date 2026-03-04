@@ -69,7 +69,7 @@ with col2:
                 try:
                     # Cấu hình AI với API Key đã giấu
                     genai.configure(api_key=api_key)
-                    model = genai.GenerativeModel('gemini-2.5-pro')
+                    model = genai.GenerativeModel('gemini-2.5-flash')
                     
                     # Prompt Engineering cốt lõi ngầm định
                     system_prompt = f"""
