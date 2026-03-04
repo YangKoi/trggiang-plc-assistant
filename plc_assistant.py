@@ -15,8 +15,8 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-st.markdown("<h1 class='main-title'>⚙️ CODESYS AI Expert</h1>", unsafe_allow_html=True)
-st.markdown("Trợ lý AI chuyên sâu thiết kế cấu trúc phần mềm và lập trình **Structured Text (ST)** trên nền tảng **CODESYS V3.5** (Hỗ trợ Wago, Beckhoff, Schneider, Inovance AM...).")
+st.markdown("<h1 class='main-title'>⚙️ CODESYS AI Expert & Tutor</h1>", unsafe_allow_html=True)
+st.markdown("Trợ lý AI chuyên sâu thiết kế phần mềm, viết code **Structured Text (ST)** và hướng dẫn thao tác trực tiếp trên nền tảng **CODESYS V3.5**.")
 st.markdown("---")
 
 # ==========================================
@@ -50,15 +50,15 @@ col1, col2 = st.columns([1.2, 1.8], gap="large")
 with col1:
     st.subheader("📝 Yêu cầu bài toán")
     user_prompt = st.text_area(
-        "Mô tả chi tiết máy tự động hoặc chức năng bạn muốn lập trình:",
+        "Mô tả chi tiết chức năng bạn muốn lập trình:",
         height=300,
-        placeholder="Ví dụ:\nHãy hướng dẫn tôi lập trình điều khiển một xi lanh khí nén.\n- Cảm biến hành trình: Sensor_Home, Sensor_End.\n- Nút nhấn: Btn_Auto, Btn_Manual, Btn_Cylinder_Out.\n- Van điện từ: Valve_Out, Valve_Return.\nYêu cầu: Viết theo dạng máy trạng thái (State Machine) dùng lệnh CASE."
+        placeholder="Ví dụ:\nHãy hướng dẫn tôi lập trình một bộ đếm sản phẩm chạy trên băng tải.\n- Sensor: X_Product.\n- Yêu cầu: Đếm số lượng, đếm đến 10 thì bật đèn Y_Full trong 3 giây rồi tự reset bộ đếm."
     )
     
     generate_btn = st.button("🚀 PHÂN TÍCH & XUẤT CODE", type="primary", use_container_width=True)
 
 with col2:
-    st.subheader("💡 Giải pháp & Mã nguồn (CODESYS V3.5)")
+    st.subheader("💡 Giải pháp & Hướng dẫn (CODESYS V3.5)")
     
     if generate_btn:
         if not api_key:
@@ -66,46 +66,49 @@ with col2:
         elif not user_prompt:
             st.warning("⚠️ Vui lòng nhập mô tả bài toán!")
         else:
-            with st.spinner(f"Đang thiết kế giải pháp trên nền tảng CODESYS..."):
+            with st.spinner(f"Đang thiết kế giải pháp và trích xuất tài liệu hướng dẫn CODESYS..."):
                 try:
                     # Dùng flash để đảm bảo tốc độ cao và không bị dính Quota Limit
                     genai.configure(api_key=api_key)
                     model = genai.GenerativeModel('gemini-2.5-flash')
                     
-                    # Prompt Engineering CHUYÊN SÂU CHO CODESYS
+                    # Prompt Engineering CẤP ĐỘ GIA SƯ (TUTOR) CHO CODESYS
                     system_prompt = f"""
-                    Bạn là một Chuyên gia Kỹ thuật Phần mềm Tự động hóa (Senior Automation Software Architect), 
-                    cực kỳ am hiểu nền tảng CODESYS V3.5 và tiêu chuẩn IEC 61131-3.
+                    Bạn là một Chuyên gia Kỹ thuật Phần mềm Tự động hóa (Senior Automation Architect) và là Giảng viên đào tạo CODESYS V3.5.
                     
                     Người dùng muốn giải quyết bài toán sau: '{user_prompt}'
                     Loại POU ưu tiên: {pou_type}.
                     
-                    Hãy xuất kết quả theo ĐÚNG 4 PHẦN sau, sử dụng ngôn ngữ tiếng Việt chuyên nghiệp:
+                    Hãy xuất kết quả theo ĐÚNG 5 PHẦN sau, trình bày cực kỳ dễ hiểu, từng bước một:
                     
-                    ### 1. Hướng dẫn tiếp cận (Architecture Guide)
+                    ### 1. 🖱️ Hướng dẫn thao tác trên phần mềm (GUI Step-by-step)
+                    - Hướng dẫn người dùng MỞ PHẦN MỀM CODESYS và click chuột vào đâu để tạo khối code này.
+                    - Cụ thể: Click chuột phải vào 'Application' -> Chọn 'Add Object' -> 'POU'...
+                    - Đặt tên khối là gì? Chọn Type là gì (Program/FB/FC)? Chọn Implementation Language là gì (Structured Text - ST)?
+                    
+                    ### 2. 🧠 Phân tích Thuật toán
                     - Giải thích ngắn gọn cách tiếp cận bài toán.
-                    - Nên tạo loại POU nào (PRG, FB, FC)? Tại sao?
-                    - Cần dùng các thư viện chuẩn nào của CODESYS không (ví dụ Standard.lib cho TON, TOF, R_TRIG...)?
+                    - Cần dùng các block chuẩn nào (như TON, CTU, R_TRIG từ Standard.lib)?
                     
-                    ### 2. Khai báo biến (Declaration Part)
-                    Viết đoạn code khai báo biến dạng text chuẩn của CODESYS để người dùng có thể copy-paste thẳng vào khung Declaration phía trên của POU.
-                    (Sử dụng VAR_INPUT, VAR_OUTPUT, VAR, VAR_IN_OUT... phù hợp).
+                    ### 3. 📋 Khai báo biến (Declaration Part)
+                    - Cung cấp đoạn text khai báo biến để người dùng COPY và PASTE thẳng vào KHUNG PHÍA TRÊN của POU trong CODESYS.
+                    - Dùng đúng chuẩn: VAR_INPUT, VAR_OUTPUT, VAR...
                     
-                    ### 3. Mã nguồn ST (Implementation Part)
-                    Viết mã nguồn bằng ngôn ngữ Structured Text. 
-                    - Nếu bài toán phức tạp, hãy ưu tiên dùng cấu trúc CASE (State Machine).
-                    - Đặt code trong block `pascal` hoặc `iecst`.
-                    - Có comment giải thích chi tiết ý nghĩa từng khối lệnh.
+                    ### 4. 💻 Mã nguồn ST (Implementation Part)
+                    - Cung cấp mã nguồn Structured Text để COPY và PASTE vào KHUNG PHÍA DƯỚI của POU.
+                    - Chú ý: Cú pháp CODESYS yêu cầu gọi biến instance của Timer/Counter đúng chuẩn (VD: T1(IN:= , PT:= ); ).
+                    - Comment giải thích chi tiết trong code.
                     
-                    ### 4. Hướng dẫn sử dụng (Instantiation & Calling)
-                    - Hướng dẫn người dùng cách khai báo (Instance) và gọi khối POU này trong chương trình chính (ví dụ PLC_PRG).
+                    ### 5. ⚙️ Cấu hình chạy thực tế (Calling & Task Configuration)
+                    - Hướng dẫn cách gọi khối này trong chương trình chính (thường là PLC_PRG).
+                    - Nhắc nhở người dùng kiểm tra 'Task Configuration' -> 'MainTask' xem đã có PLC_PRG trong đó chưa để code được quét (Cyclic).
                     """
                     
                     response = model.generate_content(system_prompt)
-                    st.success("✅ Đã hoàn tất bản thiết kế giải pháp!")
+                    st.success("✅ Đã hoàn tất bản thiết kế và hướng dẫn!")
                     st.markdown(response.text)
                     
                 except Exception as e:
                     st.error(f"Đã xảy ra lỗi hệ thống: {e}")
     else:
-        st.info("Khu vực hiển thị hướng dẫn giải pháp, khai báo biến và mã nguồn. Bấm 'Phân tích & Xuất Code' để bắt đầu.")
+        st.info("Nhập yêu cầu bên trái. Hệ thống sẽ hướng dẫn bạn từng cú click chuột trên CODESYS và xuất mã nguồn chuẩn.")
