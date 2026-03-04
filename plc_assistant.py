@@ -1,10 +1,10 @@
 import streamlit as st
 import google.generativeai as genai
-
+import os
 # ==========================================
 # CẤU HÌNH GIAO DIỆN
 # ==========================================
-st.set_page_config(page_title="Riken Viet - PLC AI Assistant", page_icon="🤖", layout="wide")
+st.set_page_config(page_title="Trg Giang - PLC AI Assistant", page_icon="🤖", layout="wide")
 
 st.markdown("""
 <style>
