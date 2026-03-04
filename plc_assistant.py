@@ -39,7 +39,7 @@ with st.sidebar:
         ["Siemens (TIA Portal - SCL)", "Mitsubishi (GX Works 3 - ST)", "Inovance (AutoShop - ST)"]
     )
     
-    st.markdown("<div style='text-align: center; color: #888888; font-size: 13px; margin-top: 50px;'>© Bản quyền thuộc về Riken Việt</div>", unsafe_allow_html=True)
+    st.markdown("<div style='text-align: center; color: #888888; font-size: 13px; margin-top: 50px;'>© Bản quyền thuộc về trggiang</div>", unsafe_allow_html=True)
 
 # ==========================================
 # MAIN AREA: NHẬP YÊU CẦU & XUẤT KẾT QUẢ
